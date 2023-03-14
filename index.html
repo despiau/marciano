@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado</title>
+    <style>
+        #word-display {
+            font-size: 24px;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        #lives {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #message {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ahorcado</h1>
+    <div id="word-display"></div>
+    <p id="lives"></p>
+    <p id="message"></p>
+    <script>
+        const words = ['dominicana', 'quisqueya', 'independencia', 'duarte', 'patria'];
+        let selectedWord = words[Math.floor(Math.random() * words.length)];
+        let hiddenWord = '_'.repeat(selectedWord.length);
+        let lives = 6;
+        let gameOver = false;
+
+        document.getElementById('word-display').innerText = hiddenWord;
+        document.getElementById('lives').innerText = `Vidas restantes: ${lives}`;
+
+        document.addEventListener('keypress', (event) => {
+            if (!gameOver) {
+                const letter = event.key.toLowerCase();
+                if (selectedWord.includes(letter)) {
+                    for (let i = 0; i < selectedWord.length; i++) {
+                        if (selectedWord[i] === letter) {
+                            hiddenWord = hiddenWord.substring(0, i) + letter + hiddenWord.substring(i + 1);
+                        }
+                    }
+                } else {
+                    lives -= 1;
+                }
+                document.getElementById('word-display').innerText = hiddenWord;
+                document.getElementById('lives').innerText = `Vidas restantes: ${lives}`;
+
+                if (hiddenWord === selectedWord) {
+                    gameOver = true;
+                    document.getElementById('message').innerText = '¡Ganaste!';
+                } else if (lives === 0) {
+                    gameOver = true;
+                    document.getElementById('message').innerText = `Perdiste. La palabra era: ${selectedWord}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
